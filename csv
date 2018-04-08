@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# Load options
+. ./config
+
+# /! SCRIPT !/ DO NOT TOUCH 
+# Create CSV file
+if [[ $1 = "initiate" ]]; then
+	echo "Please check config file before running this!"
+	if [[ -z $OUTPUT ]]; then
+		echo "You lied about checking the config file :( (or config wasn't marked as executable, please chmod +x)"
+	else
+		mkdir OLD
+		read -p "Enter the server name (will also be SQL table name): " SQLTABLE
+		SERVERNAME=$SQLTABLE
+		read -p "This will rename the datafile to a different one, create a new one. Continue? (y/n) " CHOISU
+		if [[ "$CHOISU" = "y" ]] || [[ ! -z $2 ]]; then
+			mv $OUTPUT OLD/"$TIMESHORT".bak
+			touch $OUTPUT
+			echo "${SERVERNAME}" > ${OUTPUT}
+			echo "Data file created."
+			read -p "Would you like to also initiate MySQL? This will erase your existing SQL table if it has the same name! (y/n) " ASKSQL
+				if [[ "$ASKSQL" = "y" ]]; then
+					mysql --host=${SQLHOST} --user=${SQLUSER} --password=${SQLPASS} ${SQLDB} -e "DROP TABLE IF EXISTS \'$SQLTABLE\'; CREATE TABLE \'$SQLTABLE\' (`TIME` text NOT NULL, `PLAYERCOUNT` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; COMMIT;"
+				else
+					echo "Finished."
+				fi
+		else 
+			echo "Cancelled."
+		fi
+	fi
+
+# Add entry, refer to help for details
+elif [[ $1 = "add" ]]; then
+	SERVERNAME=$SQLTABLE
+	PLAYERCOUNT=$2
+	echo "\"${TIME}\",\"${PLAYERCOUNT}\"" >> ${OUTPUT}
+
+# Help
+elif [[ $1 = "help" ]]; then
+	echo "Use option \"initiate\" to backup the old file, create a new file and SQL table and start fresh"
+	echo "	\$2 is for SQL table and Server name, please please PLEASE have this"
+	echo "Use option \"add\" to add entry"
+	echo "	\$2 is the player count"
+	echo "	Server name is the same as SQL table name ¯\\_(ツ)_/¯"
+	echo "Use option \"sync\" to publish file to MySQL"
+
+# Push MySQL
+elif [[ $1 = "sync" ]]; then
+	read -p "This will take a while. Continue? (y/n) " ASKSQL
+	if [[ "$ASKSQL" = "y" ]]; then
+		ln -s ${OUTPUT} ${SQLTABLE}
+		mysqlimport --host=${SQLHOST} --user=${SQLUSER} --password=${SQLPASS} --ignore-lines=1 ${SQLDB} ${OUTPUT}
+		#mysql -u${SQLUSER} -p${SQLPASS} ${SQLDB} --local-infile=1 -e "LOAD DATA LOCAL INFILE \'${OUTPUT}\' INTO TABLE  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n'"
+	else
+		echo "Cancelled."
+	fi
+
+# Cleanup /!DANGEROUS!/
+elif [[ $1 = "cleanup" ]]; then
+	read -p "This will remove ALL backups. ARE YOU SURE? (y/n) " CLEANUP1
+	if [[ "$CLEANUP1" = "y" ]]; then
+		read -p "ARE YOU SURE THAT THIS ISN'T JUST A BAD HABIT OF YOURS? (y/n) " CLEANUP2
+		if [[ "$CLEANUP2" = "y" ]]; then
+			read -p "Just kidding we don't have a cleanup function :D (y/n) " CLEANUP3
+			if [[ "$CLEANUP3" = "y" ]]; then
+				rm -fv ./OLD/??????????.bak
+				echo "Cleaned up >:("
+			else
+				echo "Wise choice"
+			fi
+		else
+			echo "Wise choice"
+		fi
+	else
+		echo "Wise choice"
+	fi
+
+# Debug mode, for various purposes I suppose
+elif [[ $1 = "debug" ]]; then
+	echo "Data file name: "$OUTPUT""
+	echo "Table file name: "$SQLTABLE""
+	echo "TIME: "$TIME""
+	echo "TIMESHORT: "$TIMESHORT""
+	echo "VERSION: "$VERSION""
+
+# If no options are passed
+else
+	echo "Please use a valid option. Refer to \"help\" for help."
+	echo "Version: $VERSION"
+fi
+
+
+

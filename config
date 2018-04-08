@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Options
+export TIME=$(date +"%H:%M:%S %d/%m/%Y") # Date, eg 16:20 06/12/1337
+export TIMESHORT=$(date +%H%M%d%m%y) # Format: [xxyyaabbcc], in which xx is Hour, yy is Minute, aa is Day, bb is Month and cc is Year
+export VERSION="pre1"
+export SQLUSER="" # SQL Username
+export SQLPASS="" # SQL Password
+export SQLPORT="" # SQL Port
+export SQLHOST="" # SQL Host
+export OUTPUT="" # File name
+export SQLDB="" # SQL Database
+export SQLTABLE=$(head -n 1 "$OUTPUT") # Don't touch me :(
+
+
