@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# Options
-export TIME=$(date +"%H:%M:%S %d/%m/%Y") # Date, eg 16:20 06/12/1337
-export TIMESHORT=$(date +%H%M%d%m%y) # Format: [xxyyaabbcc], in which xx is Hour, yy is Minute, aa is Day, bb is Month and cc is Year
-export VERSION="pre1"
-export SQLUSER="" # SQL Username
-export SQLPASS="" # SQL Password
-export SQLPORT="" # SQL Port
-export SQLHOST="" # SQL Host
-export OUTPUT="" # File name
-export SQLDB="" # SQL Database
-export SQLTABLE=$(head -n 1 "$OUTPUT") # Don't touch me :(
-
-
+USER=$(cat ~/serverfiles/tf/addons/sourcemod/configs/databases.cfg | grep user | head -n1 | awk '{print $2}'| sed -e 's/^"//' -e 's/"$//')
+PASSWORD=$(cat ~/serverfiles/tf/addons/sourcemod/configs/databases.cfg | grep pass | head -n1 | awk '{print $2}' | sed -e 's/^"//' -e 's/"$//')
+HOST=$(cat ~/serverfiles/tf/addons/sourcemod/configs/databases.cfg | grep host | tail -n1 | awk '{print $2}' | sed -e 's/^"//' -e 's/"$//')
+localhost="localhost"
+LOOPBACK=$(/sbin/ifconfig lo | sed -En ';s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
+DATABASE="sourcebans-pp"
+TIME=$(date +"%H:%M:%S %d/%m/%Y") # Date, eg 16:20 06/12/1337
+TIMESHORT=$(date +%H%M%d%m%y) # Format: [xxyyaabbcc], in which xx is Hour, yy is Minute, aa is Day, bb is Month and cc is Year
+DATE=$(date +%d/%m/%Y)
+VERSION="pre2-rewrite"
+ID=(1 11 12 14) # Refer to Sourcebans++ Server Management page for more info

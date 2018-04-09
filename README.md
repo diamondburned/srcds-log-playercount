@@ -1,8 +1,8 @@
 # sql-log-playercount
-A short Bash x SQL script to log playercounts to MySQL (MySQL part is optional)
+A short Bash x SQL script to log playercounts to MySQL (MySQL part is optional). This script relies on SourceBans++ to maintain its convenience. 
 
 ### Todo
-- [ ] Finish the script (check all functions, also check SQL functions)
-- [ ] Write a loop for ease of adding
+- [ ] Write script to convert output to CSV (easy, replace space with comma) for importing
+- [ ] Write SQL script to import
 - [ ] Write a Web panel that graphs (with log in and stuff)
-- [ ] Maybe find a better way to organize the script for large server clusters (maybe have a miniscript just for SQL adding)
+- [ ] Write a version that's not SB++ dependent
