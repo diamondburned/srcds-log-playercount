@@ -11,5 +11,6 @@ RCON binary from https://github.com/n0la/rcon, compiled locally
 ### Todo
 - [ ] Write script to convert output to CSV (easy, replace space with comma) for importing
 - [ ] Write SQL script to import
+- [ ] Remove the hardcoded limitations of 4 servers (pretty hard, won't do this first)
 - [ ] Write a Web panel that graphs (with log in and stuff)
 - [ ] Write a version that's not SB++ dependent
