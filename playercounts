@@ -52,10 +52,10 @@ else
 	SV3=$(cat cache | sed -n 6p | awk '{print $3}')
 	SV4=$(cat cache | sed -n 8p | awk '{print $3}')
 		
-	NAME1=$(cat cache | sed -n 1p | sed -e 's/hostname: 「MODDAGE」x1,000,000 //g')
-	NAME2=$(cat cache | sed -n 3p | sed -e 's/hostname: 「MODDAGE」x1,000,000 //g')
-	NAME3=$(cat cache | sed -n 5p | sed -e 's/hostname: 「MODDAGE」x1,000,000 //g')
-	NAME4=$(cat cache | sed -n 7p | sed -e 's/hostname: 「MODDAGE」x1,000,000 //g')
+	NAME1=$(cat cache | sed -n 1p | sed -e 's/hostname://g')
+	NAME2=$(cat cache | sed -n 3p | sed -e 's/hostname://g')
+	NAME3=$(cat cache | sed -n 5p | sed -e 's/hostname://g')
+	NAME4=$(cat cache | sed -n 7p | sed -e 's/hostname://g')
 	
 	echo "$TIME $SV1" >> data/ID1_"$NAME1.log"
 	echo "$TIME $SV2" >> data/ID2_"$NAME2.log"
